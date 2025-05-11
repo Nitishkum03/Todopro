@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FiUser, FiMail, FiCalendar, FiSettings, FiLogOut } from 'react-icons/fi';
 
-const UserProfile = ({ user, onLogout, onClose }) => {
+const UserProfile = ({ user, onLogout, onClose, }) => {
   const [activeTab, setActiveTab] = useState('profile');
 
   const formatDate = (dateString) => {
