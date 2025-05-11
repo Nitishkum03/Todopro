@@ -1,11 +1,12 @@
-import React from 'react';
-import { FiPlus } from "react-icons/fi";
+import React, { useState } from 'react';
+import { FiPlus, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
 const TaskCalendar = ({ selectedDate, setSelectedDate, tasks, setShowModal, setNewTask }) => {
-  const today = new Date();
-  const month = today.getMonth();
-  const year = today.getFullYear();
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const month = currentDate.getMonth();
+  const year = currentDate.getFullYear();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const firstDayOfMonth = new Date(year, month, 1).getDay();
 
   // Function to handle date click and open modal with pre-filled date
   const handleDateClick = (dateString) => {
@@ -86,6 +87,16 @@ const TaskCalendar = ({ selectedDate, setSelectedDate, tasks, setShowModal, setN
     }
   };
 
+  // Function to navigate to previous month
+  const goToPreviousMonth = () => {
+    setCurrentDate(new Date(year, month - 1, 1));
+  };
+
+  // Function to navigate to next month
+  const goToNextMonth = () => {
+    setCurrentDate(new Date(year, month + 1, 1));
+  };
+
   return (
     <div className="p-6 bg-gray-100 rounded-lg justify-center items-center gap-10">
       <div className="flex justify-between items-center">
@@ -96,12 +107,31 @@ const TaskCalendar = ({ selectedDate, setSelectedDate, tasks, setShowModal, setN
       </div>
       <div className="bg-white p-4 rounded-lg shadow mt-4">
         <div className="flex justify-between items-center mb-2">
+          <button 
+            onClick={goToPreviousMonth}
+            className="p-2 hover:bg-gray-100 rounded-full"
+            title="Previous Month"
+          >
+            <FiChevronLeft />
+          </button>
           <span className="font-semibold">
-            {new Date().toLocaleString("default", { month: "long" })}{" "}
-            {new Date().getFullYear()}
+            {currentDate.toLocaleString("default", { month: "long" })}{" "}
+            {currentDate.getFullYear()}
           </span>
+          <button 
+            onClick={goToNextMonth}
+            className="p-2 hover:bg-gray-100 rounded-full"
+            title="Next Month"
+          >
+            <FiChevronRight />
+          </button>
         </div>
         <div className="grid grid-cols-7 gap-2 text-center">
+          {/* Empty cells for days before the first day of the month */}
+          {[...Array(firstDayOfMonth)].map((_, index) => (
+            <div key={`empty-${index}`} className="h-10" />
+          ))}
+          {/* Days of the month */}
           {[...Array(daysInMonth).keys()].map((day) => {
             const dateString = `${year}-${String(month + 1).padStart(2, "0")}-${String(
               day + 1
