@@ -213,6 +213,8 @@ export default function TaskMaster() {
           setShowModal={setShowModal}
           currentView={currentView}
           changeView={changeView}
+          user={user}
+          onLogout={handleLogout}
         />
 
         {currentView === "list" && (
